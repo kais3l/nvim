@@ -1,4 +1,5 @@
-print("Hello World")
+vim.opt.shiftwidth = 4
+
 
 require("config.lazy")
 vim.keymap.set("n","<space><space>x","<cmd>source %<CR>")
