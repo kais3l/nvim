@@ -6,14 +6,16 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
+      { out,                            "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
     os.exit(1)
   end
 end
-vim.opt.rtp:prepend(lazypath)
+
+-- Hey! Put lazy into the runtimepath for neovim!
+vim.opt.runtimepath:prepend(lazypath)
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
@@ -24,14 +26,12 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    -- import your plugins
-    {"catppuccin/nvim",config = function() vim.cmd.colorscheme "catppuccin" end, name = "catppuccin", priority = 1000 },
-    -- catppuccin is in ~/.local/share/nvim/lazy/catppuccin/lua/catppuccin/init.lua directory
-    {import = "config.plugins" },
-    --used to import the plugins from inside the config directory
-    
+    { "catppuccin/nvim",        config = function() vim.cmd.colorscheme "catppuccin" end, name = "catppuccin", priority = 1000 },
+    { import = "config.plugins" },
   },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  -- automatically check for plugin updates
+  change_detection = {
+    -- automatically check for config file changes and reload the ui
+    enabled = false,
+    notify = false, -- get a notification when changes are found
+  },
 })
